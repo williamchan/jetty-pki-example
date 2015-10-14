@@ -64,11 +64,11 @@
 							<maxIdleTime>60000</maxIdleTime>
 
               <keystore>${basedir}/src/test/certs/keystore.jks</keystore>
-              <password>password</password>
-              <keyPassword>password</keyPassword>
+              <password>g7^w@IzOgkPdBZjK</password>
+              <keyPassword>g7^w@IzOgkPdBZjK</keyPassword>
 
               <truststore>${basedir}/src/test/certs/truststore.jks</truststore>
-              <trustPassword>password</trustPassword>
+              <trustPassword>6pSC5p8vf0nDv%*j</trustPassword>
 
 							<needClientAuth>true</needClientAuth>
 						</connector>
