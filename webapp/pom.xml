@@ -63,15 +63,12 @@
 							<port>8443</port>
 							<maxIdleTime>60000</maxIdleTime>
 
-							<keystore>${basedir}/src/test/certs/alice.jks</keystore>
-							<password>password</password>
-							<keyPassword>password</keyPassword>
+              <keystore>${basedir}/src/test/certs/keystore.jks</keystore>
+              <password>password</password>
+              <keyPassword>password</keyPassword>
 
-							<!--<truststore>${basedir}/src/test/certs/truststore.jks</truststore>-->
-							<!--<trustPassword>password</trustPassword>-->
-
-							<truststore>${basedir}/src/test/certs/self-signed-truststore.jks</truststore>
-							<trustPassword>password</trustPassword>
+              <truststore>${basedir}/src/test/certs/truststore.jks</truststore>
+              <trustPassword>password</trustPassword>
 
 							<needClientAuth>true</needClientAuth>
 						</connector>

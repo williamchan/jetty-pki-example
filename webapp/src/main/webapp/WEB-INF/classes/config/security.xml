@@ -22,7 +22,7 @@
 		<authentication-provider>
 			<user-service>
 				<!-- hard code some user and their roles -->
-				<user name="wchan" password="password" authorities="ROLE_USER, ROLE_ADMIN" />
+				<user name="userA" password="password" authorities="ROLE_USER, ROLE_ADMIN" />
 			</user-service>
 		</authentication-provider>
 	</authentication-manager>
