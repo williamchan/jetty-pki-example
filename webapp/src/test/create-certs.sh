@@ -11,8 +11,9 @@ C="US"
 ST="CA"
 L="Redwood City"
 O="PaxataDev"
- 
-CN_CA="My CA Root 3"
+
+# Do not reuse this for multiple CA certs.
+CN_CA="PaxataDev Root CA"
 # This needs to be localhost if testing on https://localhost
 CN_SERVER="localhost"
 CN_CLIENT="Paxata User userA"
@@ -28,7 +29,7 @@ mkdir -p ${OUT_DIR}
 openssl genrsa -des3 -out ${OUT_DIR}/ca.key -passout pass:${CA_PASSWORD} 4096
  
 # create CA cert
-openssl req -new -x509 -days 365 -key ${OUT_DIR}/ca.key -out ${OUT_DIR}/ca.crt \
+openssl req -new -x509 -days 1500 -key ${OUT_DIR}/ca.key -out ${OUT_DIR}/ca.crt \
  -passin pass:${CA_PASSWORD} -subj "/C=${C}/ST=${ST}/L=${L}/O=${O}/CN=${CN_CA}/"
 
 # create truststore
@@ -45,7 +46,7 @@ openssl req -new -key ${OUT_DIR}/server.key -out ${OUT_DIR}/server.csr \
  -passin pass:${SERVER_PASSWORD} -subj "/C=${C}/ST=${ST}/L=${L}/O=${O}/CN=${CN_SERVER}/"
 
 # create server cert
-openssl x509 -req -days 365 -in ${OUT_DIR}/server.csr -CA ${OUT_DIR}/ca.crt \
+openssl x509 -req -days 1500 -in ${OUT_DIR}/server.csr -CA ${OUT_DIR}/ca.crt \
  -CAkey ${OUT_DIR}/ca.key -set_serial 01 -out ${OUT_DIR}/server.crt \
  -passin pass:${CA_PASSWORD}
 
@@ -67,10 +68,21 @@ openssl req -new -key ${OUT_DIR}/client.key -out ${OUT_DIR}/client.csr \
  -passin pass:${CLIENT_PASSWORD} -subj "/C=${C}/ST=${ST}/L=${L}/O=${O}/CN=${CN_CLIENT}/"
 
 # create client cert
-openssl x509 -req -days 365 -in ${OUT_DIR}/client.csr -CA ${OUT_DIR}/ca.crt \
+openssl x509 -req -days 1500 -in ${OUT_DIR}/client.csr -CA ${OUT_DIR}/ca.crt \
  -CAkey ${OUT_DIR}/ca.key -set_serial 02 -out ${OUT_DIR}/client.crt \
  -passin pass:${CA_PASSWORD}
 
 # convert client cert to PKCS12, including key
 openssl pkcs12 -export -out ${OUT_DIR}/client.p12 -inkey ${OUT_DIR}/client.key \
  -in ${OUT_DIR}/client.crt -passin pass:${CLIENT_PASSWORD} -passout pass:${CLIENT_PASSWORD}
+
+###############################
+
+# create client cert, this one expires in one day
+openssl x509 -req -days 1 -in ${OUT_DIR}/client.csr -CA ${OUT_DIR}/ca.crt \
+ -CAkey ${OUT_DIR}/ca.key -set_serial 03 -out ${OUT_DIR}/expired-client.crt \
+ -passin pass:${CA_PASSWORD}
+
+# convert expiring client cert to PKCS12, including key
+openssl pkcs12 -export -out ${OUT_DIR}/expired-client.p12 -inkey ${OUT_DIR}/client.key \
+ -in ${OUT_DIR}/expired-client.crt -passin pass:${CLIENT_PASSWORD} -passout pass:${CLIENT_PASSWORD}
